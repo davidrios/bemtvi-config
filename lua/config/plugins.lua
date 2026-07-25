@@ -8,6 +8,13 @@ nx.plugins({
     end
   },
   {
+    "nxvim/nxvim-help",
+    desc = "Help tags finder and visualizer",
+    config = function()
+      require("nxvim-help").setup()
+    end
+  },
+  {
     "nxvim/nxvim-keys-helper",
     desc = "Popup of available keybindings as you type (which-key)",
     config = function()
@@ -29,6 +36,13 @@ nx.plugins({
     end
   },
   {
+    "nxvim/nxvim-efmls-configs",
+    desc = "Quickstart configs for the efm-langserver",
+    config = function()
+      require("nxvim-lspconfig").setup()
+    end
+  },
+  {
     "nxvim/nxvim-line",
     desc = "Configurable statusline (lualine)",
     config = function()
@@ -40,6 +54,13 @@ nx.plugins({
     desc = "Diff & merge-conflict visualizer",
     config = function()
       require("nxvim-diff").setup()
+    end
+  },
+  {
+    "nxvim/nxvim-workspaces",
+    desc = "Tools to make working with project dirs easier",
+    config = function()
+      require("nxvim-workspaces").setup()
     end
   },
   {
