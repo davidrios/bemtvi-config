@@ -29,6 +29,16 @@ M.init = nx.async(function()
   local lsp_dir = M.lsp_dir()
   nx.await(nx.fs.mkdir(lsp_dir, { recursive = true }))
 
+  -- This dir is machine-local build output living inside the PROJECT's repo, so
+  -- it ignores itself: `*` covers node_modules, the generated package.json /
+  -- lockfile, and this file too, leaving nothing here for a stray `git add -A`
+  -- to pick up. Scoped to `lsp/` on purpose — `.nxvim/config.json` one level up
+  -- is meant to be committed. Only written when absent, so an edit here stands.
+  local gitignore = lsp_dir .. "/.gitignore"
+  if not nx.await(nx.fs.exists(gitignore)) then
+    nx.await(nx.fs.write(gitignore, "*\n"))
+  end
+
   if not nx.await(nx.fs.exists(lsp_dir .. "/package.json")) then
     local res = nx.await(nx.run({ cmd = "npm", args = { "init", "-y" }, cwd = lsp_dir }))
     if res.code ~= 0 then
