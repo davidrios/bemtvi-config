@@ -39,7 +39,7 @@ nx.plugins({
     "nxvim/nxvim-efmls-configs",
     desc = "Quickstart configs for the efm-langserver",
     config = function()
-      require("nxvim-lspconfig").setup()
+      require("nxvim-efmls-configs").setup()
     end
   },
   {

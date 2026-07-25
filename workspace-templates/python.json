@@ -1,0 +1,35 @@
+{
+  "languages": {
+    "python": {
+      "lsps": {
+        "pylsp": {},
+        "ruff": {},
+        "basedpyright": {
+          "settings": {
+            "basedpyright": {
+              "analysis": {
+                "diagnosticMode": "workspace"
+              },
+              "typeCheckingMode": "off"
+            }
+          }
+        }
+      },
+      "save_actions": [
+        {
+          "require": "nx.lsp",
+          "method": "code_action",
+          "params": { "context": { "only": ["source.fixAll"] }, "apply": true }
+        },
+        {
+          "require": "nx.lsp",
+          "method": "code_action",
+          "params": { "context": { "only": ["source.organizeImports"] }, "apply": true }
+        },
+        { "require": "nx.lsp", "method": "format", "params": { "name": "ruff" } }
+      ]
+    }
+  },
+
+  "setup": { "require": "workspace-setup.python", "method": "setup" }
+}

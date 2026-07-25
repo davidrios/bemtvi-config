@@ -1,0 +1,10 @@
+{
+  "languages": {
+    "go,gomod": {
+      "lsps": {
+        "golangci_lint_ls": {},
+        "gopls": {}
+      }
+    }
+  }
+}

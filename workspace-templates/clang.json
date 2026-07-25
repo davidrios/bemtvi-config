@@ -1,0 +1,9 @@
+{
+  "languages": {
+    "c,cpp,objc,objcpp,cuda": {
+      "lsps": {
+        "clangd": {}
+      }
+    }
+  }
+}

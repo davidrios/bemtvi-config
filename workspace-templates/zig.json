@@ -1,0 +1,24 @@
+{
+  "languages": {
+    "zig,zir": {
+      "lsps": {
+        "zls": {}
+      },
+      "save_actions": [
+        {
+          "require": "nx.lsp",
+          "method": "code_action",
+          "params": { "context": { "only": ["source.fixAll"] }, "apply": true }
+        },
+        {
+          "require": "nx.lsp",
+          "method": "code_action",
+          "params": { "context": { "only": ["source.organizeImports"] }, "apply": true }
+        },
+        { "require": "nx.lsp", "method": "format", "params": { "name": "zls" } }
+      ]
+    }
+  },
+
+  "setup": { "require": "workspace-setup.zig", "method": "setup" }
+}

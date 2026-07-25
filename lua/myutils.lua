@@ -165,18 +165,20 @@ local function my_tab_line()
 end
 M.my_tab_line = my_tab_line
 
+-- A nxvim-dap `attach` configuration for a debugpy listening on `port`. `connect`
+-- is a plain table here (nxvim-dap expands function values to STRINGS only, and
+-- passes the whole configuration through as the `attach` arguments), and the
+-- local root is the workspace root when there is one.
 local function genAttachPython(name, port, remoteRoot)
+  local localRoot = nx.workspace.dir() or vim.fn.getcwd()
   return {
     type = 'python',
     request = 'attach',
     name = 'attach ' .. name,
     pathMappings = {
-      { localRoot = vim.fn.getcwd(), remoteRoot = remoteRoot or vim.fn.getcwd() }
+      { localRoot = localRoot, remoteRoot = remoteRoot or localRoot }
     },
-    connect = function()
-      local host = '127.0.0.1'
-      return { host = host, port = port }
-    end,
+    connect = { host = '127.0.0.1', port = port },
   }
 end
 M.genAttachPython = genAttachPython
@@ -189,60 +191,12 @@ function M.feedkeys(keys, mode)
   vim.api.nvim_feedkeys(processed_keys, mode, false)
 end
 
-function M.setup_workspace_rc(name)
-  local mod = prequire('workspace-templates/' .. name)
-  if mod == nil then
-    vim.notify('error: workspace template "' .. name .. '" not found', vim.log.levels.ERROR)
-    return
-  end
-
-  if vim.fn.filereadable(SESSION_FILE) ~= 1 then
-    vim.notify('error: session file does not exist, create it first', vim.log.levels.ERROR)
-    return
-  end
-
-  local rc_file_name = 'rc-' .. name .. '.lua'
-  local ws_rc_file = Path:new(SESSION_PREFIX):joinpath(rc_file_name)
-
-  if ws_rc_file:exists() then
-    vim.notify(
-      'error: workspace template rc file "' .. ws_rc_file .. '" already exists, not overwritting',
-      vim.log.levels.ERROR)
-    return
-  end
-
-  A.run(function()
-    if mod.setup(ws_rc_file) then
-      M.anotify(
-        'workspace rc file created, source it by adding "require(\'myutils\').source_rc(\'' ..
-        name .. '\')" to your rc.lua and restart')
-      vim.schedule(function()
-        M.source_rc(name)
-      end)
-    end
-  end)
-end
-
-function M.source_rc(name)
-  vim.cmd('luafile ' .. vim.fn.fnameescape(SESSION_PREFIX .. '/' .. 'rc-' .. name .. '.lua'))
-end
-
-vim.api.nvim_create_user_command('MyUtilsSetupRC', function(args)
-  M.setup_workspace_rc(args.fargs[1])
-end, {
-  nargs = 1,
-  complete = function()
-    local scan = require('plenary.scandir')
-    local ws_templates_path = vim.fn.stdpath('config') .. '/lua/workspace-templates'
-    local ws_dirs = scan.scan_dir(ws_templates_path, { hidden = false, depth = 1, only_dirs = true })
-    local only_names = {}
-    for i = 1, #ws_dirs do
-      local parts = vim.split(ws_dirs[i], '/')
-      table.insert(only_names, parts[#parts])
-    end
-    return only_names
-  end,
-})
+-- `setup_workspace_rc` / `source_rc` / `:MyUtilsSetupRC` lived here: the old
+-- driver that copied a `workspace-templates/<name>/rc.lua` into `.neovim/` and
+-- sourced it. nxvim-workspaces replaces it — `:WorkspaceTemplate <name>` merges
+-- `workspace-templates/<name>.json` into the project's `.nxvim/config.json` —
+-- so it is gone (it was already dead: SESSION_FILE, SESSION_PREFIX, Path and A
+-- are all undefined here).
 
 local global_g_args = { '!node_modules', '!.idea', '!.vscode', '!.neovim', '!.venv' }
 function M.extend_global_g_args(g_args)
