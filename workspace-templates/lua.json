@@ -1,0 +1,9 @@
+{
+  "languages": {
+    "lua": {
+      "lsps": {
+        "lua_ls": {}
+      }
+    }
+  }
+}

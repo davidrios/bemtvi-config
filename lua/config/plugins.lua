@@ -10,20 +10,36 @@ nx.plugins({
   {
     "nxvim/nxvim-help",
     desc = "Help tags finder and visualizer",
+  },
+  {
+    "nxvim/nxvim-editorconfig",
+    desc = "Load .editorconfig settings",
     config = function()
-      require("nxvim-help").setup()
+      require("nxvim-editorconfig").setup()
     end
   },
   {
     "nxvim/nxvim-keys-helper",
-    desc = "Popup of available keybindings as you type (which-key)",
+    desc = "Popup of available keybindings as you type",
     config = function()
-      require("nxvim-keys-helper").setup()
+      require("nxvim-keys-helper").setup({
+        spec = {
+          {'<leader>b', group = 'Buffer'},
+          {'<leader>k', group = 'Dock'},
+          {'<leader>q', group = 'Quit'},
+          {'<leader>u', group = 'Utilities'},
+          {'<leader>s', group = 'Search/Replace'},
+          {'<leader>f', group = 'Find files/buffers/etc'},
+          {'<leader>c', group = 'Code'},
+          {'<leader>d', group = 'Debug'},
+          {'<leader>l', group = 'LSP'},
+        }
+      })
     end
   },
   {
     "nxvim/nxvim-tree",
-    desc = "File explorer sidebar (<leader>e)",
+    desc = "File explorer sidebar",
     config = function()
       require("nxvim-tree").setup()
     end
@@ -44,7 +60,7 @@ nx.plugins({
   },
   {
     "nxvim/nxvim-line",
-    desc = "Configurable statusline (lualine)",
+    desc = "Configurable statusline",
     config = function()
       require("nxvim-line").setup()
     end
@@ -79,4 +95,12 @@ nx.plugins({
       require("nxvim-markdown-preview").setup()
     end
   },
+  {
+    "nxvim/nxvim-snippets",
+    desc = "Snippet collection loader and engine",
+    config = function()
+      require("nxvim-snippets").setup()
+    end,
+    deps = { "rafamadriz/friendly-snippets" },
+  }
 })

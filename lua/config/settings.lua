@@ -9,6 +9,7 @@ vim.opt.wrap = false
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes:2"
 vim.opt.colorcolumn = "80,120"
+vim.o.fixendofline = false
 
 -- vim.opt.tabline = '%!v:lua.require(\'myutils\').my_tab_line()'
 -- vim.cmd.colorscheme("catppuccin-mocha")

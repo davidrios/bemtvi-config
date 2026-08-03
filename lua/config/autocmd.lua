@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
   pattern = '*',
   callback = function()
     if not vim.fn.expand('%'):match('COMMIT_EDITMSG$') then
-      vim.cmd('silent! normal! g`"zv')
+      -- vim.cmd('silent! normal! g`"zv')
     end
   end,
 })

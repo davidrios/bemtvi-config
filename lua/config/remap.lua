@@ -73,7 +73,7 @@ vim.keymap.set("n", "<C-i>", function() jump_smart(1) end, { desc = "Smart Jump 
 vim.keymap.set("n", "<leader>qf", function() vim.cmd("qa!") end, { desc = "Force quit" })
 vim.keymap.set("n", "<leader>qa", ":qa<cr>", { desc = "Quit all" })
 vim.keymap.set("n", "<leader>qw", vim.cmd.xa, { desc = "Quit writing all" })
-vim.keymap.set("n", "<leader>qq", vim.cmd.q, { desc = "Quit" })
+vim.keymap.set("n", "<leader>qq", vim.cmd.q, { desc = "Quit / Close window" })
 -- vim.keymap.set("n", "<leader>uc", "<cmd>Centerpad 53<cr>", { desc = "Activate Centerpad" })
 -- vim.keymap.set("n", "<leader>ucc", "<cmd>Centerpad 53<cr><cmd>Centerpad 53<cr>", { desc = "Activate Centerpad" })
 vim.keymap.set("n", "<leader>uh", vim.cmd.noh, { desc = "Clear highlight" })
@@ -159,14 +159,14 @@ vim.keymap.set("n", "<leader>8", "8gt", { desc = "Go to tab 8" })
 vim.keymap.set("n", "<leader>9", "9gt", { desc = "Go to tab 9" })
 
 -- <leader>ff  find_files with `fd -u -t file` (overrides the shipped rg-based "files")
-mu.make_files_picker("files", "Find Files", "fd", { "-u", "-t", "file", "--color", "never" })
+-- mu.make_files_picker("files", "Find Files", "fd", { "-u", "-t", "file", "--color", "never" })
 -- <C-p>  git_files
 mu.make_files_picker("git_files", "Git Files", "git", { "ls-files" })
 
 -- <leader>fg  live grep            <leader>fA  live grep -uu
 -- <leader>fG  live grep -uu + excludes
-mu.make_grep_picker("live_grep", "Live Grep", {})
-mu.make_grep_picker("live_grep_uu", "Live Grep (-uu)", { unrestricted = 2 })
+-- mu.make_grep_picker("live_grep", "Live Grep", {})
+-- mu.make_grep_picker("live_grep_uu", "Live Grep (-uu)", { unrestricted = 2 })
 mu.make_grep_picker("live_grep_ex", "Live Grep (-uu, excludes)", { unrestricted = 2, globs = mu.global_g_args })
 
 -- Files / grep
@@ -178,11 +178,22 @@ vim.keymap.set("v", "<leader>fg", mu.picker_with_selection("live_grep"), { desc 
 vim.keymap.set("n", "<leader>fG", mu.open_picker("live_grep_ex"), { desc = "Live grep -uu + excludes" })
 vim.keymap.set("v", "<leader>fG", mu.picker_with_selection("live_grep_ex"),
   { desc = "Live grep -uu + excludes (selection)" })
-vim.keymap.set("n", "<leader>fA", mu.open_picker("live_grep_uu"), { desc = "Live grep -uu" })
-vim.keymap.set("v", "<leader>fA", mu.picker_with_selection("live_grep_uu"), { desc = "Live grep -uu (selection)" })
+-- vim.keymap.set("v", "<leader>fA", mu.picker_with_selection("live_grep_uu"), { desc = "Live grep -uu (selection)" })
 
 -- Code / LSP — these route their results into nx.picker on their own.
 vim.keymap.set("n", "<leader>cx", mu.open_picker("diagnostics"), { desc = "Diagnostics" })
 vim.keymap.set("n", "<leader>cs", nx.lsp.document_symbol, { desc = "LSP document symbols" })
 vim.keymap.set("n", "<leader>cr", nx.lsp.references, { desc = "LSP references" })
 vim.keymap.set("n", "<leader>ct", nx.lsp.type_definition, { desc = "LSP type definitions" })
+
+-- Dock nav
+for lhs, target in pairs({
+  ["<leader>kh"] = "left",
+  ["<leader>kl"] = "right",
+  ["<leader>kk"] = "top",
+  ["<leader>kj"] = "bottom",
+  ["<leader>kk"] = "main",
+}) do
+  nx.keymap.set("n", lhs, function() nx.layer.focus(target) end,
+    { desc = "Focus the " .. target .. " layer" })
+end
