@@ -2,8 +2,9 @@
   "languages": {
     "python": {
       "lsps": {
-        "pylsp": {},
-        "ruff": {},
+        "pylsp": {"priority": 10},
+        "ruff": {"priority": 5},
+        "ty": {"priority": 15},
         "basedpyright": {
           "settings": {
             "basedpyright": {
@@ -12,21 +13,22 @@
               },
               "typeCheckingMode": "off"
             }
-          }
+          },
+          "priority": 20
         }
       },
       "save_actions": [
         {
-          "require": "nx.lsp",
+          "require": "btv.lsp",
           "method": "code_action",
           "params": { "context": { "only": ["source.fixAll"] }, "apply": true }
         },
         {
-          "require": "nx.lsp",
+          "require": "btv.lsp",
           "method": "code_action",
           "params": { "context": { "only": ["source.organizeImports"] }, "apply": true }
         },
-        { "require": "nx.lsp", "method": "format", "params": { "name": "ruff" } }
+        { "require": "btv.lsp", "method": "format", "params": { "name": "ruff" } }
       ]
     }
   },

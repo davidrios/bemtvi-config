@@ -180,11 +180,11 @@ vim.keymap.set("v", "<leader>fG", mu.picker_with_selection("live_grep_ex"),
   { desc = "Live grep -uu + excludes (selection)" })
 -- vim.keymap.set("v", "<leader>fA", mu.picker_with_selection("live_grep_uu"), { desc = "Live grep -uu (selection)" })
 
--- Code / LSP — these route their results into nx.picker on their own.
+-- Code / LSP — these route their results into btv.picker on their own.
 vim.keymap.set("n", "<leader>cx", mu.open_picker("diagnostics"), { desc = "Diagnostics" })
-vim.keymap.set("n", "<leader>cs", nx.lsp.document_symbol, { desc = "LSP document symbols" })
-vim.keymap.set("n", "<leader>cr", nx.lsp.references, { desc = "LSP references" })
-vim.keymap.set("n", "<leader>ct", nx.lsp.type_definition, { desc = "LSP type definitions" })
+vim.keymap.set("n", "<leader>cs", btv.lsp.document_symbol, { desc = "LSP document symbols" })
+vim.keymap.set("n", "<leader>cr", btv.lsp.references, { desc = "LSP references" })
+vim.keymap.set("n", "<leader>ct", btv.lsp.type_definition, { desc = "LSP type definitions" })
 
 -- Dock nav
 for lhs, target in pairs({
@@ -194,6 +194,6 @@ for lhs, target in pairs({
   ["<leader>kj"] = "bottom",
   ["<leader>kk"] = "main",
 }) do
-  nx.keymap.set("n", lhs, function() nx.layer.focus(target) end,
+  btv.keymap.set("n", lhs, function() btv.layer.focus(target) end,
     { desc = "Focus the " .. target .. " layer" })
 end

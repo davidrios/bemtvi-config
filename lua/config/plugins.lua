@@ -1,28 +1,40 @@
-nx.plugins({
+local ok, err = pcall(function()
+  vim.cmd("colorscheme catppuccin-mocha")
+end)
+if not ok then
+  local msg
+  if tostring(err):match("module 'catppuccin' not found") then
+    msg = ("colorscheme 'catppuccin' is a git submodule and isn't checked out.\n"
+      .. "    git -C %s submodule update --init --recursive"):format(btv.stdpath("config"))
+  else
+    msg = "colorscheme 'catppuccin' failed to load: " .. tostring(err)
+  end
+  btv.on("VimEnter", btv.async(function()
+    local dir = btv.utils.joinpath(btv.stdpath("config"), "pack/defaults/start/catppuccin")
+    local empty = btv.await(btv.fs.exists(dir)) and #btv.await(btv.fs.readdir(dir)) == 0
+    btv.notify("config: " .. (empty and msg or "…"), btv.log.levels.ERROR)
+  end))
+end
+
+btv.plugins({
   {
-    "nxvim/catppuccin-nxvim",
-    name = "catppuccin",
-    desc = "Soothing pastel colorscheme",
-    config = function()
-      vim.cmd("colorscheme catppuccin")
-    end
-  },
-  {
-    "nxvim/nxvim-help",
+    "bemtvi/bemtvi-help",
     desc = "Help tags finder and visualizer",
+    cmd = { "help" },
+    keys = { "<leader>fh" },
   },
   {
-    "nxvim/nxvim-editorconfig",
+    "bemtvi/bemtvi-editorconfig",
     desc = "Load .editorconfig settings",
     config = function()
-      require("nxvim-editorconfig").setup()
+      require("bemtvi-editorconfig").setup()
     end
   },
   {
-    "nxvim/nxvim-keys-helper",
+    "bemtvi/bemtvi-keys-helper",
     desc = "Popup of available keybindings as you type",
     config = function()
-      require("nxvim-keys-helper").setup({
+      require("bemtvi-keys-helper").setup({
         spec = {
           {'<leader>b', group = 'Buffer'},
           {'<leader>k', group = 'Dock'},
@@ -38,68 +50,76 @@ nx.plugins({
     end
   },
   {
-    "nxvim/nxvim-tree",
+    "bemtvi/bemtvi-tree",
     desc = "File explorer sidebar",
+    cmd = { "Tree", "TreeReveal" },
+    keys = { "<leader>e" },
     config = function()
-      require("nxvim-tree").setup()
+      require("bemtvi-tree").setup()
     end
   },
   {
-    "nxvim/nxvim-lspconfig",
+    "bemtvi/bemtvi-lspconfig",
     desc = "Quickstart configs for the built-in LSP client",
     config = function()
-      require("nxvim-lspconfig").setup()
+      require("bemtvi-lspconfig").setup()
     end
   },
   {
-    "nxvim/nxvim-efmls-configs",
+    "bemtvi/bemtvi-efmls-configs",
     desc = "Quickstart configs for the efm-langserver",
     config = function()
-      require("nxvim-efmls-configs").setup()
+      require("bemtvi-efmls-configs").setup()
     end
   },
   {
-    "nxvim/nxvim-line",
+    "bemtvi/bemtvi-line",
     desc = "Configurable statusline",
     config = function()
-      require("nxvim-line").setup()
+      require("bemtvi-line").setup({
+        sections = {
+          lualine_b = { "diff", "diagnostics" },
+        },
+      })
     end
   },
   {
-    "nxvim/nxvim-diff",
+    "bemtvi/bemtvi-diff",
     desc = "Diff & merge-conflict visualizer",
+    cmd = { "DiffGit", "DiffConflict" },
     config = function()
-      require("nxvim-diff").setup()
+      require("bemtvi-diff").setup()
     end
   },
   {
-    "nxvim/nxvim-workspaces",
+    "bemtvi/bemtvi-workspaces",
     desc = "Tools to make working with project dirs easier",
     config = function()
-      require("nxvim-workspaces").setup()
+      require("bemtvi-workspaces").setup()
     end
   },
   {
-    "nxvim/nxvim-dap",
+    "bemtvi/bemtvi-dap",
     desc = "Debugger front end — breakpoints, stepping, REPL (<F5>, <leader>db)",
     cmd = { "DapContinue", "DapToggleBreakpoint" },
     keys = { "<F5>", "<leader>db" },
     config = function()
-      require("nxvim-dap").setup({})
+      require("bemtvi-dap").setup({})
     end
   },
   {
-    "nxvim/nxvim-markdown-preview",
+    "bemtvi/bemtvi-markdown-preview",
     desc = "Markdown previews server",
+    cmd = { "MarkdownPreview" },
     config = function()
-      require("nxvim-markdown-preview").setup()
+      require("bemtvi-markdown-preview").setup()
     end
   },
   {
-    "nxvim/nxvim-snippets",
+    "bemtvi/bemtvi-snippets",
     desc = "Snippet collection loader and engine",
     config = function()
-      require("nxvim-snippets").setup()
+      require("bemtvi-snippets").setup()
     end,
     deps = { "rafamadriz/friendly-snippets" },
   }

@@ -1,0 +1,14 @@
+{
+  "languages": {
+    "json,jsonc": {
+      "lsps": {
+        "jsonls": {},
+      }
+    }
+  },
+  "setup": {
+    "require": "workspace-setup.node",
+    "method": "ensure",
+    "params": ["vscode-langservers-extracted", "eslint-formatter-visualstudio"]
+  }
+}

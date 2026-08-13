@@ -3,13 +3,13 @@
 --
 -- Everything here is path-dependent, which is why it is Lua and not JSON: the
 -- language servers are npm packages installed per project under
--- `<workspace>/.nxvim/lsp`, so each server's `cmd` is only knowable once that
+-- `<workspace>/.bemtvi/lsp`, so each server's `cmd` is only knowable once that
 -- directory exists. The hook is AWAITED before the template's `lsps` are
 -- registered and enabled, so the npm bootstrap finishes and every `cmd` is in
 -- place before anything is spawned.
 --
 -- efm is the exception that stays out of the template's `lsps` entirely:
--- nxvim-efmls-configs owns efm's `nx.lsp` config, and its `languages` map holds
+-- bemtvi-efmls-configs owns efm's `btv.lsp` config, and its `languages` map holds
 -- preset factories JSON can't carry.
 
 local mu = require("myutils")
@@ -32,18 +32,18 @@ local PACKAGES = {
 -- Point each server at the project-local package, leaving everything else
 -- (filetypes, root markers, settings) to the server's own preset — the same
 -- split the old rc had, where only the `cmd` was ever overridden.
--- `nx.lsp.config` deep-merges, so these compose with the preset rather than
+-- `btv.lsp.config` deep-merges, so these compose with the preset rather than
 -- replacing it — and with the template's own `lsps` entries, which are applied
 -- after this hook and would win on any key they set.
 local function configure_servers(node_modules)
   local bin = node_modules .. "/.bin"
 
-  nx.lsp.config("cssls", { cmd = { bin .. "/vscode-css-language-server", "--stdio" } })
-  nx.lsp.config("jsonls", { cmd = { bin .. "/vscode-json-language-server", "--stdio" } })
-  nx.lsp.config("html", { cmd = { bin .. "/vscode-html-language-server", "--stdio" } })
-  nx.lsp.config("eslint", { cmd = { bin .. "/vscode-eslint-language-server", "--stdio" } })
+  btv.lsp.config("cssls", { cmd = { bin .. "/vscode-css-language-server", "--stdio" } })
+  btv.lsp.config("jsonls", { cmd = { bin .. "/vscode-json-language-server", "--stdio" } })
+  btv.lsp.config("html", { cmd = { bin .. "/vscode-html-language-server", "--stdio" } })
+  btv.lsp.config("eslint", { cmd = { bin .. "/vscode-eslint-language-server", "--stdio" } })
 
-  nx.lsp.config("vue_ls", {
+  btv.lsp.config("vue_ls", {
     cmd = { bin .. "/vue-language-server", "--stdio" },
     init_options = {
       typescript = {
@@ -52,7 +52,7 @@ local function configure_servers(node_modules)
     },
   })
 
-  nx.lsp.config("ts_ls", {
+  btv.lsp.config("ts_ls", {
     cmd = { bin .. "/typescript-language-server", "--stdio" },
     init_options = {
       plugins = {
@@ -81,7 +81,7 @@ end
 local function configure_efm()
   local prettier = (require("efmls-configs.formatters.prettier"))
 
-  require("nxvim-efmls-configs").setup({
+  require("bemtvi-efmls-configs").setup({
     languages = {
       javascript = { prettier },
       typescript = { prettier },
@@ -91,7 +91,7 @@ local function configure_efm()
   })
 end
 
-M.setup = nx.async(function()
+M.setup = btv.async(function()
   mu.extend_global_g_args({
     "!.nuxt",
     "!yarn.lock",
@@ -101,7 +101,7 @@ M.setup = nx.async(function()
     "!test-report.junit.xml",
   })
 
-  local node_modules = nx.await(node.ensure(PACKAGES))
+  local node_modules = btv.await(node.ensure(PACKAGES))
   configure_servers(node_modules)
   configure_efm()
 end)

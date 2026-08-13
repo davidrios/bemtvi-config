@@ -1,0 +1,3 @@
+[submodule "pack/defaults/start/catppuccin"]
+	path = pack/defaults/start/catppuccin
+	url = https://github.com/bemtvi/catppuccin-bemtvi.git

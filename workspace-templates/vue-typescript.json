@@ -10,7 +10,7 @@
         "ts_ls": {}
       },
       "save_actions": [
-        { "require": "nx.lsp", "method": "format", "params": { "name": "efm" } }
+        { "require": "btv.lsp", "method": "format", "params": { "name": "efm" } }
       ]
     }
   },

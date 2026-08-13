@@ -165,12 +165,12 @@ local function my_tab_line()
 end
 M.my_tab_line = my_tab_line
 
--- A nxvim-dap `attach` configuration for a debugpy listening on `port`. `connect`
--- is a plain table here (nxvim-dap expands function values to STRINGS only, and
+-- A bemtvi-dap `attach` configuration for a debugpy listening on `port`. `connect`
+-- is a plain table here (bemtvi-dap expands function values to STRINGS only, and
 -- passes the whole configuration through as the `attach` arguments), and the
 -- local root is the workspace root when there is one.
 local function genAttachPython(name, port, remoteRoot)
-  local localRoot = nx.workspace.dir() or vim.fn.getcwd()
+  local localRoot = btv.workspace.dir() or vim.fn.getcwd()
   return {
     type = 'python',
     request = 'attach',
@@ -193,8 +193,8 @@ end
 
 -- `setup_workspace_rc` / `source_rc` / `:MyUtilsSetupRC` lived here: the old
 -- driver that copied a `workspace-templates/<name>/rc.lua` into `.neovim/` and
--- sourced it. nxvim-workspaces replaces it — `:WorkspaceTemplate <name>` merges
--- `workspace-templates/<name>.json` into the project's `.nxvim/config.json` —
+-- sourced it. bemtvi-workspaces replaces it — `:WorkspaceTemplate <name>` merges
+-- `workspace-templates/<name>.json` into the project's `.bemtvi/config.json` —
 -- so it is gone (it was already dead: SESSION_FILE, SESSION_PREFIX, Path and A
 -- are all undefined here).
 
@@ -229,21 +229,21 @@ end
 -- flags (`opts.unrestricted`, `opts.globs`). One factory covers plain grep, `-uu`,
 -- and `-uu` + excludes — exactly the three telescope live_grep variants.
 function M.make_grep_picker(name, title, opts)
-  nx.picker.source({
+  btv.picker.source({
     name = name,
     title = title,
     layer = "main",
     dynamic = true,       -- re-run rg after each (debounced) query edit
     preview = "location", -- scroll the preview to the match and highlight it
-    items = nx.async(function(ctx)
+    items = btv.async(function(ctx)
       if ctx.query == "" then
         return
       end
-      local stream = nx.run_stream({ cmd = "rg", args = rg_args(ctx.query, opts), cwd = ctx.cwd })
+      local stream = btv.run_stream({ cmd = "rg", args = rg_args(ctx.query, opts), cwd = ctx.cwd })
       ctx.on_cancel(function()
         stream:kill()
       end)
-      for batch in nx.await_each(stream) do
+      for batch in btv.await_each(stream) do
         for _, l in ipairs(batch) do
           local file, lnum, col = l:match("^(.-):(%d+):(%d+):")
           if file then
@@ -253,24 +253,24 @@ function M.make_grep_picker(name, title, opts)
       end
     end),
     confirm = function(item, mode, layer)
-      nx.picker.edit(item, mode, layer)
+      btv.picker.edit(item, mode, layer)
     end,
   })
 end
 
 -- Stream a plain listing command (one path per line) as file candidates.
 function M.make_files_picker(name, title, cmd, cmd_args)
-  nx.picker.source({
+  btv.picker.source({
     name = name,
     title = title,
     layer = "main",
     preview = "file",
-    items = nx.async(function(ctx)
-      local stream = nx.run_stream({ cmd = cmd, args = cmd_args, cwd = ctx.cwd })
+    items = btv.async(function(ctx)
+      local stream = btv.run_stream({ cmd = cmd, args = cmd_args, cwd = ctx.cwd })
       ctx.on_cancel(function()
         stream:kill()
       end)
-      for batch in nx.await_each(stream) do
+      for batch in btv.await_each(stream) do
         for _, l in ipairs(batch) do
           if l ~= "" then
             ctx.push({ text = l, path = l })
@@ -279,7 +279,7 @@ function M.make_files_picker(name, title, cmd, cmd_args)
       end
     end),
     confirm = function(item, mode, layer)
-      nx.picker.edit(item, mode, layer)
+      btv.picker.edit(item, mode, layer)
     end,
   })
 end
@@ -289,17 +289,17 @@ end
 -- once the register mirror has refreshed) open the picker pre-filled with it.
 function M.picker_with_selection(source)
   return function()
-    nx._feedkeys('"zy', false, false)
-    nx.on_next_tick(function()
-      local q = nx.reg.get("z"):gsub("%s+", " ")
-      nx.picker.open(source, { query = q })
+    btv._feedkeys('"zy', false, false)
+    btv.on_next_tick(function()
+      local q = btv.reg.get("z"):gsub("%s+", " ")
+      btv.picker.open(source, { query = q })
     end)
   end
 end
 
 function M.open_picker(source)
   return function()
-    nx.picker.open(source)
+    btv.picker.open(source)
   end
 end
 
