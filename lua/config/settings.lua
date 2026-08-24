@@ -5,12 +5,20 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
-vim.opt.wrap = false
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes:2"
 vim.opt.colorcolumn = "80,120"
-vim.opt.fixendofline = false
 vim.opt.autopairs = true
+vim.opt.numberwidth = 6
+vim.opt.fixendofline = false
+vim.opt.wrap = false
+
+--   utf-縄県（おき8  unix   lu 
+-- ├  .lua😀rc.json
+-- ├  🤴🏼b❤️emtvi-lo縄県（おきck.json
+-- ├  i😱nit.lua
+-- └ 󰈙 縄県（おきLICENSE
+-- 沖縄県（おきなわけん、旧字体: 沖繩縣、英語: Okinawa Prefecture）は、日本の九州・沖縄地方に位置する県。県庁所在地は那覇市。旧琉球国。
 
 -- vim.opt.tabline = '%!v:lua.require(\'myutils\').my_tab_line()'
 -- vim.cmd.colorscheme("catppuccin-mocha")
