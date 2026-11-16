@@ -1,20 +1,20 @@
-local ok, err = pcall(function()
-  vim.cmd("colorscheme catppuccin-mocha")
-end)
-if not ok then
-  local msg
-  if tostring(err):match("module 'catppuccin' not found") then
-    msg = ("colorscheme 'catppuccin' is a git submodule and isn't checked out.\n"
-      .. "    git -C %s submodule update --init --recursive"):format(btv.stdpath("config"))
-  else
-    msg = "colorscheme 'catppuccin' failed to load: " .. tostring(err)
-  end
-  btv.on("VimEnter", btv.async(function()
-    local dir = btv.utils.joinpath(btv.stdpath("config"), "pack/defaults/start/catppuccin")
-    local empty = btv.await(btv.fs.exists(dir)) and #btv.await(btv.fs.readdir(dir)) == 0
-    btv.notify("config: " .. (empty and msg or "…"), btv.log.levels.ERROR)
-  end))
-end
+-- local ok, err = pcall(function()
+--   vim.cmd("colorscheme catppuccin-mocha")
+-- end)
+-- if not ok then
+--   local msg
+--   if tostring(err):match("module 'catppuccin' not found") then
+--     msg = ("colorscheme 'catppuccin' is a git submodule and isn't checked out.\n"
+--       .. "    git -C %s submodule update --init --recursive"):format(btv.stdpath("config"))
+--   else
+--     msg = "colorscheme 'catppuccin' failed to load: " .. tostring(err)
+--   end
+--   btv.on("VimEnter", btv.async(function()
+--     local dir = btv.utils.joinpath(btv.stdpath("config"), "pack/defaults/start/catppuccin")
+--     local empty = btv.await(btv.fs.exists(dir)) and #btv.await(btv.fs.readdir(dir)) == 0
+--     btv.notify("config: " .. (empty and msg or "…"), btv.log.levels.ERROR)
+--   end))
+-- end
 
 btv.plugins({
   {

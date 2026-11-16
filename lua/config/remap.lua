@@ -170,12 +170,12 @@ mu.make_files_picker("git_files", "Git Files", "git", { "ls-files" })
 mu.make_grep_picker("live_grep_ex", "Live Grep (-uu, excludes)", { unrestricted = 2, globs = mu.global_g_args })
 
 -- Files / grep
-vim.keymap.set("n", "<leader>ff", mu.open_picker("files"), { desc = "Find files" })
+-- vim.keymap.set("n", "<leader>ff", mu.open_picker("files"), { desc = "Find files" })
 vim.keymap.set("v", "<leader>ff", mu.picker_with_selection("files"), { desc = "Find files (selection)" })
 vim.keymap.set("n", "<C-p>", mu.open_picker("git_files"), { desc = "Git files" })
-vim.keymap.set("n", "<leader>fg", mu.open_picker("live_grep"), { desc = "Live grep" })
+-- vim.keymap.set("n", "<leader>fg", mu.open_picker("live_grep"), { desc = "Live grep" })
 vim.keymap.set("v", "<leader>fg", mu.picker_with_selection("live_grep"), { desc = "Live grep (selection)" })
-vim.keymap.set("n", "<leader>fG", mu.open_picker("live_grep_ex"), { desc = "Live grep -uu + excludes" })
+-- vim.keymap.set("n", "<leader>fG", mu.open_picker("live_grep_ex"), { desc = "Live grep -uu + excludes" })
 vim.keymap.set("v", "<leader>fG", mu.picker_with_selection("live_grep_ex"),
   { desc = "Live grep -uu + excludes (selection)" })
 -- vim.keymap.set("v", "<leader>fA", mu.picker_with_selection("live_grep_uu"), { desc = "Live grep -uu (selection)" })
